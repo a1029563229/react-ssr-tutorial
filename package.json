@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "start": "next",
+    "build": "next build",
+    "serve": "next start"
+  },
+  "dependencies": {
+    "antd": "^4.0.2",
+    "isomorphic-fetch": "^2.2.1",
+    "next": "^9.3.0",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  }
+}
