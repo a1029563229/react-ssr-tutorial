@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Table, Avatar } from "antd";
 import fetch from "isomorphic-fetch";
+import WithError from '../../components/WithError';
 
 const { Column } = Table;
 const Vegetables = ({ vegetableList }) => {
@@ -53,7 +54,7 @@ Vegetables.getInitialProps = async ctx => {
   const result = await fetchVegetable(1, 10);
 
   // 将查询结果返回，绑定在 props 上
-  return result.data;
+  return result;
 }
 
-export default Vegetables;
+export default WithError()(Vegetables);

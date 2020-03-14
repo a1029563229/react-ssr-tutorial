@@ -2,6 +2,7 @@ import React from "react";
 import { Descriptions, Avatar } from 'antd';
 import Router from "next/router";
 import fetch from "isomorphic-fetch";
+import nextCookie from 'next-cookies';
 
 const User = ({ userInfo }) => {
   if (!userInfo) return null;
@@ -21,10 +22,14 @@ const User = ({ userInfo }) => {
 
 // 获取用户信息
 const getUserInfo = async (ctx) => {
+  // 在 cookie 中获取 token 信息
+  const { token } = nextCookie(ctx);
   return fetch("http://dev-api.jt-gmall.com/member", {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      // 在首部带上身份认证信息 token
+      'x-auth-token': token
     },
     // graphql 的查询风格
     body: JSON.stringify({ query: `{ getUserInfo { nickname avatarUrl city gender } }` })
@@ -46,7 +51,7 @@ const redirect = ({ req, res }, path) => {
 User.getInitialProps = async ctx => {
   const result = await getUserInfo(ctx);
   const { errors, data } = result;
-  if (errors.length > 0 || errors[0].message.startsWith("401")) {
+  if (errors && errors.length > 0 && errors[0].message.startsWith("401")) {
     return redirect(ctx, '/login');
   }
 
